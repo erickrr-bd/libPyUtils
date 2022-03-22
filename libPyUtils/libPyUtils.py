@@ -47,6 +47,23 @@ class libPyUtils:
 		return True
 
 
+	def convertTimeToStringSearch(self, unit_time, total_time):
+		"""
+		Method that converts an amount of time expressed in a unit of time into a string to perform searches in ElasticSearch.
+		
+		:arg unit_time:
+		:arg total_time:
+		"""
+		string_search = "now-"
+		if unit_time == "minutes":
+			string_search += str(total_time) + 'm'
+		elif unit_time == "hours":
+			string_search += str(total_time) + 'h'
+		elif unit_time == "days":
+			string_search += str(total_time) + 'd'
+		return string_search
+
+
 	def getPassphraseKeyFile(self, path_key_file):
 		"""
 		Method that reads the passphrase from the key file.
