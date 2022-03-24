@@ -47,12 +47,28 @@ class libPyUtils:
 		return True
 
 
+	def convertTimeToSeconds(self, unit_time, total_time):
+		"""
+		Method that converts an amount of time expressed in a unit of time into seconds.
+
+		:arg unit_time: Unit of time in which the quantity is expressed.
+		:arg total_time: Amount of time to convert.
+		"""
+		if unit_time == "minutes":
+			total_seconds = total_time * 60
+		elif unit_time == "hours":
+			total_seconds = total_time * 3600
+		elif unit_time == "days":
+			total_seconds = total_time * 86400
+		return total_seconds
+
+
 	def convertTimeToStringSearch(self, unit_time, total_time):
 		"""
 		Method that converts an amount of time expressed in a unit of time into a string to perform searches in ElasticSearch.
 		
-		:arg unit_time:
-		:arg total_time:
+		:arg unit_time: Unit of time in which the quantity is expressed.
+		:arg total_time: Amount of time to convert.
 		"""
 		string_search = "now-"
 		if unit_time == "minutes":
