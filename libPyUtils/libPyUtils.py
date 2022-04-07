@@ -1,11 +1,12 @@
-from os import chown
 from pwd import getpwnam
+from shutil import rmtree
 from Crypto import Random
 from hashlib import sha256
 from Crypto.Cipher import AES
 from yaml import safe_load, safe_dump
 from base64 import b64encode, b64decode
 from Crypto.Util.Padding import pad, unpad
+from os import chown, mkdir, path, scandir, rename
 
 class libPyUtils:
 
@@ -31,6 +32,37 @@ class libPyUtils:
 		with open(path_file_yaml, 'r') as file_yaml:
 			data_file_yaml = safe_load(file_yaml)
 		return data_file_yaml
+
+
+	def createNewFolder(self, path_new_folder):
+		"""
+		Method that creates a new folder or directory.
+
+		:arg path_new_folder: Absolute path of the new folder.
+		"""
+		if not path.isdir(path_new_folder):
+			mkdir(path_new_folder)
+
+	
+	def renameFileOrFolder(self, path_to_rename, new_path_name):
+		"""
+		Method that renames a file or directory.
+
+		:arg path_to_rename: Absolute path of the element to rename.
+		:arg new_path_name: Absolute path with the new element name.
+		"""
+		if path.exists(path_to_rename):
+			rename(path_to_rename, new_path_name)
+
+
+	def deleteFolder(self, path_folder_to_delete):
+		"""
+		Method that removes an entire directory with all the elements inside it.
+
+		:arg path_folder_to_delete: Absolute path of the directory to be removed.
+		"""
+		if path.exists(path_folder_to_delete):
+			rmtree(path_folder_to_delete)
 
 
 	def validateDataWithRegularExpression(self, regular_expression, data):
@@ -80,6 +112,19 @@ class libPyUtils:
 		return string_search
 
 
+	def convertListToDialogList(self, list_to_convert, text_to_show):
+		"""
+		Method that converts a list into a list that can be used in a RadioList or CheckList dialog.
+
+		:arg list_to_convert: List to convert.
+		:arg text_to_show: Text that will be displayed next to the option in the dialog.
+		"""
+		dialog_list = []
+		for item in list_to_convert:
+			dialog_list.append((item, text_to_show, 0))
+		return dialog_list
+
+
 	def getPassphraseKeyFile(self, path_key_file):
 		"""
 		Method that reads the passphrase from the key file.
@@ -92,6 +137,17 @@ class libPyUtils:
 		passphrase = key_file.read()
 		key_file.close()
 		return passphrase
+
+
+	def getListToAllSubDirectories(self, parent_directory_path):
+		"""
+		Method that gets all subdirectories of a parent directory.
+	
+		:arg parent_directory_path: Home directory path.
+		"""
+		with scandir(parent_directory_path) as directories:
+			sub_directories = [directory.name for directory in directories if directory.is_dir()]
+		return sub_directories
 
 
 	def changeOwnerToPath(self, path_to_change, user, group):
