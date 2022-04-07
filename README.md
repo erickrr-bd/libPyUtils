@@ -10,11 +10,16 @@ Utilities for Python applications.
 
 ## Utilities
 - Create and read YAML files.
+- Create and delete directories.
+- Rename a file or directory.
 - Validate data using a regular expression.
+- Convert list to list usable with pythondialog.
 - Get passphrase for encryption/decryption process of a file.
+- Get subdirectories of a specific directory.
 - Change of user and owner group of a directory or file.
 - Get hash of a file (sha256).
 - Data encryption and decryption (AES algorithm).
+- Converts an amount of time expressed in minutes, hours and/or days into seconds.
 - Converts an amount of time expressed in minutes, hours and/or days into a string that represents a date math to do time range searches in ElasticSearch.
 
 # Requirements
