@@ -1,3 +1,4 @@
+from shutil import copy
 from pwd import getpwnam
 from shutil import rmtree
 from Crypto import Random
@@ -32,6 +33,17 @@ class libPyUtils:
 		with open(path_file_yaml, 'r') as file_yaml:
 			data_file_yaml = safe_load(file_yaml)
 		return data_file_yaml
+
+
+	def copyFile(self, path_original_file, path_copy_file):
+		"""
+		Method that copies a file.
+
+		:arg path_original_file: Absolute path of the original file.
+		:arg path_copy_file: Absolute path where the original file will be copied.
+		"""
+		if path.exists(path_original_file):
+			copy(path_original_file, path_copy_file)
 
 
 	def createNewFolder(self, path_new_folder):
