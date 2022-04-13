@@ -1,9 +1,8 @@
-from shutil import copy
 from pwd import getpwnam
-from shutil import rmtree
 from Crypto import Random
 from hashlib import sha256
 from Crypto.Cipher import AES
+from shutil import rmtree, copy
 from yaml import safe_load, safe_dump
 from base64 import b64encode, b64decode
 from Crypto.Util.Padding import pad, unpad
