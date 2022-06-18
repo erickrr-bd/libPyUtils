@@ -1,3 +1,4 @@
+from glob import glob
 from pwd import getpwnam
 from Crypto import Random
 from hashlib import sha256
@@ -94,6 +95,8 @@ class libPyUtils:
 		"""
 		Method that converts an amount of time expressed in a unit of time into seconds.
 
+		Returns the total seconds.
+
 		:arg unit_time: Unit of time in which the quantity is expressed.
 		:arg total_time: Amount of time to convert.
 		"""
@@ -106,34 +109,53 @@ class libPyUtils:
 		return total_seconds
 
 
-	def convertTimeToStringSearch(self, unit_time, total_time):
+	def convertTimeToDateMath(self, unit_time, total_time):
 		"""
 		Method that converts an amount of time expressed in a unit of time into a string to perform searches in ElasticSearch.
 		
+		Returns the string search formed.
+
 		:arg unit_time: Unit of time in which the quantity is expressed.
 		:arg total_time: Amount of time to convert.
 		"""
 		string_search = "now-"
 		if unit_time == "minutes":
-			string_search += str(total_time) + 'm'
+			string_search += str(total_time) + 'm/m'
 		elif unit_time == "hours":
-			string_search += str(total_time) + 'h'
+			string_search += str(total_time) + 'h/h'
 		elif unit_time == "days":
-			string_search += str(total_time) + 'd'
+			string_search += str(total_time) + 'd/d'
 		return string_search
+
+
+	def createListToDialogForm(self, len_to_list, text_to_show):
+		"""
+		Method that converts a list into a list that can be used in a RadioList or CheckList dialog.
+
+		Return the list for a form dialog.
+
+		:arg list_to_convert: List to convert.
+		:arg text_to_show: Text that will be displayed next to the option in the dialog.
+		"""
+		list_to_form_dialog = []
+		for i in range(len_to_list):
+			list_to_form_dialog.append((text_to_show + ' ' + str(i + 1) + ':', (i + 1), 5, text_to_show, (i +1), 20, 30, 100))
+		return list_to_form_dialog
 
 
 	def convertListToDialogList(self, list_to_convert, text_to_show):
 		"""
 		Method that converts a list into a list that can be used in a RadioList or CheckList dialog.
 
+		Return the converted list for a checklist or radiolist dialog.
+
 		:arg list_to_convert: List to convert.
 		:arg text_to_show: Text that will be displayed next to the option in the dialog.
 		"""
-		dialog_list = []
+		list_to_dialog = []
 		for item in list_to_convert:
-			dialog_list.append((item, text_to_show, 0))
-		return dialog_list
+			list_to_dialog.append((item, text_to_show, 0))
+		return list_to_dialog
 
 
 	def getPassphraseKeyFile(self, path_key_file):
@@ -153,12 +175,26 @@ class libPyUtils:
 	def getListToAllSubDirectories(self, parent_directory_path):
 		"""
 		Method that gets all subdirectories of a parent directory.
+
+		Return all found subdirectories.
 	
 		:arg parent_directory_path: Home directory path.
 		"""
 		with scandir(parent_directory_path) as directories:
 			sub_directories = [directory.name for directory in directories if directory.is_dir()]
 		return sub_directories
+
+
+	def getListOfAllYamlFilesInFolder(self, folder_path):
+		"""
+		Method that gets all YAML files in a specific folder
+
+		Return all YAML files found in the folder (names)
+
+		:arg folder_path: Absolute folder path
+		"""
+		list_all_files_yaml = [path.basename(x) for x in glob(folder_path + '/*.yaml')]
+		return list_all_files_yaml
 
 
 	def changeOwnerToPath(self, path_to_change, user, group):
