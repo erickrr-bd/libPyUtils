@@ -7,7 +7,7 @@ from shutil import rmtree, copy
 from yaml import safe_load, safe_dump
 from base64 import b64encode, b64decode
 from Crypto.Util.Padding import pad, unpad
-from os import chown, mkdir, path, scandir, rename
+from os import chown, mkdir, path, scandir, rename, remove
 
 class libPyUtils:
 
@@ -65,6 +65,16 @@ class libPyUtils:
 		"""
 		if path.exists(path_to_rename):
 			rename(path_to_rename, new_path_name)
+
+
+	def deleteFile(self, path_file_to_delete):
+		"""
+		Method that removes a specific file.
+
+		:arg path_file_to_delete: Absolute path of the file to be removed.
+		"""
+		if path.exists(path_file_to_delete):
+			remove(path_file_to_delete)
 
 
 	def deleteFolder(self, path_folder_to_delete):
