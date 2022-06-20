@@ -153,6 +153,23 @@ class libPyUtils:
 		return list_to_form_dialog
 
 
+	def convertListToDialogForm(self, list_to_convert, text_to_show):
+		"""
+		Method that converts a list into a list that can be used in a Form dialog.
+
+		Return the converted list for a Form dialog.
+
+		:arg list_to_convert: List to convert.
+		:arg text_to_show: Text that will be displayed next to the option in the dialog.
+		"""
+		i = 0
+		list_to_form_dialog = []
+		for item in list_to_convert:
+			list_to_form_dialog.append((text_to_show + ' ' + str(i + 1) + ':', (i + 1), 5, item, (i +1), 20, 30, 100))
+			i += 1
+		return list_to_form_dialog
+
+
 	def convertListToDialogList(self, list_to_convert, text_to_show):
 		"""
 		Method that converts a list into a list that can be used in a RadioList or CheckList dialog.
