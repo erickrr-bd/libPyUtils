@@ -35,6 +35,20 @@ class libPyUtils:
 		return data_file_yaml
 
 
+	def convertDataYamlFileToString(self, path_file_yaml):
+		"""
+		Method that converts a YAML file in a string.
+
+		Returns the string with the YAML file data.
+
+		:arg path_file_yaml: Absolute path where the YAML file will be readed.
+		"""
+		with open(path_file_yaml, 'r') as file_yaml:
+			data_file_yaml = safe_load(file_yaml)
+		data_file_yaml = safe_dump(data_file_yaml,  default_flow_style = False)
+		return data_file_yaml
+
+
 	def copyFile(self, path_original_file, path_copy_file):
 		"""
 		Method that copies a file.
