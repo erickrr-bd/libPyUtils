@@ -16,7 +16,8 @@ LONG_DESC_TYPE = "text/markdown"
 
 INSTALL_REQUIRES = [
       'pyyaml',
-      'pycryptodome'
+      'pycryptodome',
+      'tabulate'
       ]
 
 setup(
