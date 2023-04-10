@@ -2,7 +2,6 @@ from glob import glob
 from pwd import getpwnam
 from Crypto import Random
 from hashlib import sha256
-from tabulate import tabulate
 from Crypto.Cipher import AES
 from shutil import rmtree, copy
 from yaml import safe_load, safe_dump
@@ -100,18 +99,6 @@ class libPyUtils:
 		"""
 		if path.exists(path_folder_to_delete):
 			rmtree(path_folder_to_delete)
-
-
-	def createFileWithTable(self, path_table_file, data_table, headers_table):
-		"""
-		Method that creates a file with a data table using tabulate.
-
-		:arg path_table_file (string): Absolute path of the file that will be created. 
-		:arg data_table (list): List with the data to form the table.
-		:arg headers_table (list): List with the headers to form the table. 
-		"""
-		with open(path_table_file, 'w') as table_file:
-			table_file.write(tabulate(data_table, headers_table, tablefmt = "grid"))
 
 
 	def validateDataWithRegularExpression(self, regular_expression, data):
@@ -228,6 +215,21 @@ class libPyUtils:
 		for item in list_to_convert:
 			list_to_dialog.append((item, text_to_show, 0))
 		return list_to_dialog
+
+
+	def getStringFromList(self, list_to_convert, title_to_show):
+		"""
+		Method converts a list in a string.
+
+		Return a string with the list's data.
+
+		:arg list_to_convert (list): List to convert.
+		:arg title_to_show (string): Title that will be displayed.
+		"""
+		message_to_display = '\n' + title_to_show + '\n'
+		for item in list_to_convert:
+			message_to_display += "\n- " + item
+		return message_to_display
 
 
 	def getPassphraseKeyFile(self, path_key_file):
