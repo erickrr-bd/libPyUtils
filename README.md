@@ -1,33 +1,43 @@
-# libPyUtils
+# libPyUtils v1.2
 
-Author: Erick Rodríguez
+Utilities for easy development of applications in Python. 
 
-Email: erickrr.tbd93@gmail.com, erodriguez@tekium.mx
-
-License: GPLv3
-
-Utilities for Python applications.
+Set of methods or functions that can be used to develop applications in Python.
 
 ## Utilities
 - Create and read YAML files.
-- Create and delete directories.
-- Rename a file or directory.
+- Read a YAML file and convert the content to a string. If the value of a key is encrypted, it replaces it with the legend "Encrypted value", for security reasons.
+- Copy a file.
+- Remove a file.
+- Create and remove folders.
+- Rename a file or folder.
 - Validate data using a regular expression.
-- Convert list to list usable with pythondialog.
-- Get passphrase for encryption/decryption process of a file.
-- Get subdirectories of a specific directory.
-- Change of user and owner group of a directory or file.
-- Get hash of a file (sha256).
-- Data encryption and decryption (AES algorithm).
 - Converts an amount of time expressed in minutes, hours and/or days into seconds.
 - Converts an amount of time expressed in minutes, hours and/or days into a string that represents a date math to do time range searches in ElasticSearch.
+- Create and/or convert a list into an object usable by PythonDialog.
+- Convert a list of objects to a string.
+- Get passphrase for encryption/decryption process of a file.
+- Get subdirectories of a folder.
+- Get a list of YAML files in a folder.
+- Modify permissions of a file or folder. Change of owner, such as, access permissions.
+- Get hash of a file (sha256).
+- Data encryption and decryption. Use of AES algorithm GCM mode.
 
 # Requirements
 - CentOS 8, Red Hat 8 or Rocky Linux 8
-- Python 3.6
+- Python 3.9
 - Python Libraries
   - pycryptodome
+  - pycryptodomex
   - pyyaml
+
+# Installation
+
+Copy the "libPyUtils" folder to the following path:
+
+`/usr/local/lib/python3.9/site-packages/`
+
+Note: The path may change depending on the version of Python being used.
 
 # Commercial Support
 ![Tekium](https://github.com/unmanarc/uAuditAnalyzer2/blob/master/art/tekium_slogo.jpeg)
