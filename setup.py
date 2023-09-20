@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 HERE = Path(__file__).parent
 
-VERSION = '1.0'
+VERSION = '1.2'
 PACKAGE_NAME = 'libPyUtils' 
 AUTHOR = 'Erick Rodríguez'
 AUTHOR_EMAIL = 'erickrr.tbd93@gmail.com, erodriguez@tekium.mx' 
@@ -17,7 +17,7 @@ LONG_DESC_TYPE = "text/markdown"
 INSTALL_REQUIRES = [
       'pyyaml',
       'pycryptodome',
-      'tabulate'
+      'pycryptodomex'
       ]
 
 setup(
