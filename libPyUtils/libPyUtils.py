@@ -1,11 +1,12 @@
 from glob import glob
 from pwd import getpwnam
+from psutil import Process
 from hashlib import sha256
 from binascii import hexlify
 from shutil import rmtree, copy
 from Cryptodome.Cipher import AES
 from yaml import safe_load, safe_dump
-from os import chown, mkdir, path, scandir, rename, remove, chmod
+from os import chown, mkdir, path, scandir, rename, remove, chmod, popen
 
 class libPyUtils:
 
@@ -114,11 +115,11 @@ class libPyUtils:
 
 	def convertTimeToSeconds(self, unit_time, total_time):
 		"""
-		Method that converts an amount of time expressed in a unit of time into seconds.
+		Method that converts a total time into seconds.
 
-		Returns the total seconds.
+		Returns the total number of seconds.
 
-		:arg unit_time (string): Unit of time in which the quantity is expressed.
+		:arg unit_time (string): Unit of time in which the quantity to be converted is expressed.
 		:arg total_time (integer): Amount of time to convert.
 		"""
 		if unit_time == "minutes":
@@ -130,7 +131,7 @@ class libPyUtils:
 		return total_seconds
 
 
-	def getGteDateMathElasticSearch(self, unit_time, total_time):
+	def getGteDateMath(self, unit_time, total_time):
 		"""
 		Method that generates the gte value in date math format.
 		
@@ -141,15 +142,15 @@ class libPyUtils:
 		"""
 		date_math_string = "now-"
 		if unit_time == "minutes":
-			date_math_string += str(total_time) + 'm/m'
+			date_math_string += str(total_time) + "m/m"
 		elif unit_time == "hours":
-			date_math_string += str(total_time) + 'h/h'
+			date_math_string += str(total_time) + "h/h"
 		elif unit_time == "days":
-			date_math_string += str(total_time) + 'd/d'
+			date_math_string += str(total_time) + "d/d"
 		return date_math_string
 
 
-	def getLteDateMathElasticSearch(self, unit_time):
+	def getLteDateMath(self, unit_time):
 		"""
 		Method that generates the lte value in date math format.
 		
@@ -323,3 +324,42 @@ class libPyUtils:
 		aes = AES.new(key, AES.MODE_GCM, nonce)
 		decrypt_data = aes.decrypt_and_verify(encrypt_data, auth_tag)
 		return decrypt_data
+
+
+	def getStatusbyService(self, service_name):
+		"""
+		Gets the current status of a specific service or daemon.
+
+		Returns "Running" if the service is active. Otherwise, "Not running" is returned.
+
+		:arg service_name (string): Name of the service or daemon.
+		"""
+		command_result = popen('(systemctl is-active --quiet ' + service_name + ' && echo "Running" || echo "Not running")').readlines()
+		service_status = command_result[0].rstrip('\n')
+		return service_status
+
+
+	def getPidbyDaemon(self, daemon_name):
+		"""
+		Obtains the PID of a specific service or daemon.
+
+		Returns the PID of the service.
+
+		:arg daemon_name (string): Name of the service or daemon.
+		"""
+		command_result = popen('systemctl show --property MainPID --value ' + daemon_name).readlines()
+		pid = int(command_result[0].rstrip('\n'))
+		return pid
+
+
+	def getThreadsNumberbyPid(self, pid):
+		"""
+		Obtains the number of threads of a particular process from its PID.
+
+		Returns the number of threads in the process.
+		
+		:arg pid (integer): Process PID.
+		"""
+		process = Process(pid).as_dict()
+		threads_number = int(process["num_threads"])
+		return threads_number
