@@ -22,14 +22,19 @@ Set of methods or functions that can be used to develop applications in Python.
 - Modify permissions of a file or folder. Change of owner, such as, access permissions.
 - Get hash of a file (sha256).
 - Data encryption and decryption. Use of AES algorithm GCM mode.
+- Obtain the current status of a specific service or daemon.
+- Obtain the PID of a specific service or daemon.
+- Obtain the number of threads of a specific process.
 
 # Requirements
 - CentOS 8, Red Hat 8 or Rocky Linux 8
 - Python 3.9
 - Python Libraries
-  - pycryptodome
-  - pycryptodomex
-  - pyyaml
+  - pycryptodomex == 3.18.0
+  - PyYAML == 6.0.1
+  - psutil == 5.9.6
+
+**NOTE:** The versions displayed are the versions with which it was tested. This doesn't mean that versions older than these don't work.
 
 # Installation
 
@@ -37,7 +42,7 @@ Copy the "libPyUtils" folder to the following path:
 
 `/usr/local/lib/python3.9/site-packages/`
 
-Note: The path may change depending on the version of Python being used.
+**NOTE:** The path depends on the Python version.
 
 # Commercial Support
 ![Tekium](https://github.com/unmanarc/uAuditAnalyzer2/blob/master/art/tekium_slogo.jpeg)
