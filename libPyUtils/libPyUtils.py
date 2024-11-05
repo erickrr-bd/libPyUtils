@@ -1,291 +1,178 @@
-from glob import glob
+"""
+Author: Erick Roberto Rodriguez Rodriguez
+Email: erodriguez@tekium.mx, erickrr.tbd93@gmail.com
+GitHub: https://github.com/erickrr-bd/libPyUtils
+libPyUtils v2.1 - October 2024
+"""
+from shutil import copy
 from pwd import getpwnam
-from psutil import Process
+from grp import getgrnam
 from hashlib import sha256
-from binascii import hexlify
-from shutil import rmtree, copy
+from os import chown, chmod, path
 from Cryptodome.Cipher import AES
 from yaml import safe_load, safe_dump
-from os import chown, mkdir, path, scandir, rename, remove, chmod, popen
 
 class libPyUtils:
 
-	def createYamlFile(self, json_data, yaml_file_path):
+	def create_yaml_file(self, data, yaml_file):
 		"""
 		Method that creates a YAML file.
 
-		:arg json_data (dict): Dictionary with the data to be stored in the file.
-		:arg yaml_file_path (string): Absolute path of the YAML file.
+		:arg data (JSON): Dictionary with data.
+		:arg yaml_file (String): YAML file.
 		"""
-		with open(yaml_file_path, 'w') as yaml_file:
-			safe_dump(json_data, yaml_file, default_flow_style = False)
+		with open(yaml_file, 'w') as file:
+			safe_dump(data, file, default_flow_style = False)
 
 
-	def readYamlFile(self, yaml_file_path):
+	def read_yaml_file(self, yaml_file):
 		"""
 		Method that reads a YAML file.
 
-		Returns a dictionary with the data stored in the YAML file.
+		Returns a dictionary with the data from the YAML file.
 
-		:arg path_yaml_file (string): Absolute path of the YAML file.
+		:arg yaml_file (String): YAML file.
 		"""
-		with open(yaml_file_path, 'r') as yaml_file:
-			yaml_file_data = safe_load(yaml_file)
-		return yaml_file_data
+		with open(yaml_file, 'r') as file:
+			data = safe_load(file)
+		return data
 
 
-	def convertYamlFileToString(self, yaml_file_path):
+	def convert_yaml_data_to_string(self, yaml_file):
 		"""
-		Method that converts the content of a YAML file to a string.
+		Method that converts the data of a YAML file into a string.
 
-		Returns the string formed from the content of the YAML file.
+		Returns a string with the data of the YAML file.
 
-		:arg yaml_file_path (string): Absolute path of the YAML file.
+		:arg yaml_file (String): YAML file.
 		"""
-		with open(yaml_file_path, 'r') as yaml_file:
-			yaml_file_data = safe_load(yaml_file)
-		for key in yaml_file_data:
-			if type(yaml_file_data[key]) == list:
-				for item in yaml_file_data[key]:
+		with open(yaml_file, 'r') as file:
+			data = safe_load(file)
+		for key in data:
+			if type(data[key]) == list:
+				for item in data[key]:
 					if type(item) == bytes:
-						yaml_file_data[key] = "Encrypted value"
-		yaml_file_data = safe_dump(yaml_file_data,  default_flow_style = False)
-		return yaml_file_data
+						data[key] = "Encrypted data"
+		data_string = safe_dump(data, default_flow_style = False)
+		return data_string
 
 
-	def copyFile(self, source_file_path, destination_file_path):
-		"""
-		Method that copies a file to a new destination.
-
-		:arg source_file_path (string): Absolute path of the file.
-		:arg destination_file_path (string): Absolute path of the destination of the file.
-		"""
-		copy(source_file_path, destination_file_path) if path.exists(source_file_path) else False
-
-
-	def createFolder(self, folder_path):
-		"""
-		Method that creates a folder.
-
-		:arg folder_path (string): Absolute path of the folder.
-		"""
-		mkdir(folder_path) if not path.isdir(folder_path) else False
-
-	
-	def renameFileOrFolder(self, file_folder_original, file_folder_new):
-		"""
-		Method that renames a file or folder.
-
-		:arg file_folder_original (string): Absolute path of the file or folder to rename.
-		:arg file_folder_new (string): Absolute path with the new name of the file or folder.
-		"""
-		rename(file_folder_original, file_folder_new) if path.exists(file_folder_original) else False
-
-
-	def deleteFile(self, file_path):
-		"""
-		Method that deletes a file.
-
-		:arg file_path (string): Absolute path of the file.
-		"""
-		remove(file_path) if path.exists(file_path) else False
-
-
-	def deleteFolder(self, folder_path):
-		"""
-		Method that deletes a directory (and the files inside it if they exist).
-
-		:arg folder_path (string): Absolute path of the folder.
-		"""
-		rmtree(folder_path) if path.exists(folder_path) else False
-
-
-	def validateDataRegex(self, regex, data):
-		"""
-		Method that validates data based on a regular expression.
-
-		Returns a boolean value, where it will be true if the data is valid, otherwise it will be false.
-
-		:arg regex (string): Regular expression.
-		:arg data (string): Data that will be validated based on the regular expression.
-		"""
-		is_data_valid = False if not regex.match(data) else True
-		return is_data_valid
-
-
-	def convertTimeToSeconds(self, unit_time, total_time):
-		"""
-		Method that converts a total time into seconds.
-
-		Returns the total number of seconds.
-
-		:arg unit_time (string): Unit of time in which the quantity to be converted is expressed.
-		:arg total_time (integer): Amount of time to convert.
-		"""
-		if unit_time == "minutes":
-			total_seconds = total_time * 60
-		elif unit_time == "hours":
-			total_seconds = total_time * 3600
-		elif unit_time == "days":
-			total_seconds = total_time * 86400
-		return total_seconds
-
-
-	def getGteDateMath(self, unit_time, total_time):
-		"""
-		Method that generates the gte value in date math format.
-		
-		Returns the date math string formed.
-
-		:arg unit_time (string): Unit of time in which the quantity is expressed.
-		:arg total_time (integer): Amount of time to convert.
-		"""
-		date_math_string = "now-"
-		if unit_time == "minutes":
-			date_math_string += str(total_time) + "m/m"
-		elif unit_time == "hours":
-			date_math_string += str(total_time) + "h/h"
-		elif unit_time == "days":
-			date_math_string += str(total_time) + "d/d"
-		return date_math_string
-
-
-	def getLteDateMath(self, unit_time):
-		"""
-		Method that generates the lte value in date math format.
-		
-		Returns the date math string formed.
-
-		:arg unit_time (string): Unit of time in which the quantity is expressed.
-		"""
-		date_math_string = ""
-		if unit_time == "minutes":
-			date_math_string += "now/m"
-		elif unit_time == "hours":
-			date_math_string += "now/h"
-		elif unit_time == "days":
-			date_math_string += "now/d"
-		return date_math_string
-
-
-	def createListToDialogForm(self, list_len, text):
-		"""
-		Method that creates a formatted list for a form.
-
-		Returns the created list.
-
-		:arg list_len (integer): List length.
-		:arg text (string): Text to be displayed on the form.
-		"""
-		list_form = []
-		[list_form.append((text + ' ' + str(i + 1) + ':', (i + 1), 5, text, (i +1), 20, 30, 100)) for i in range(list_len)]
-		return list_form
-
-
-	def convertListToDialogForm(self, list_to_convert, text):
-		"""
-		Method that converts a list to a list for a form.
-
-		Returns the converted list.
-
-		:arg list_to_convert (list): List to convert.
-		:arg text (string): Text to be displayed on the form.
-		"""
-		list_form = []
-		[list_form.append((text + ' ' + str(i + 1) + ':', (i + 1), 5, item, (i +1), 20, 30, 100)) for i, item in enumerate(list_to_convert)]
-		return list_form
-
-
-	def convertListToDialogList(self, list_to_convert, text):
-		"""
-		Method that converts a list to a list for a Checklist or RadioList Dialog.
-
-		Returns the converted list.
-
-		:arg list_to_convert (list): List to convert.
-		:arg text (string): Text to be displayed on the Checklist or Radiolist dialog.
-		"""
-		list_checklist_radiolist = []
-		[list_checklist_radiolist.append((item, text, 0)) for item in list_to_convert]
-		return list_checklist_radiolist
-
-
-	def getStringFromList(self, list_to_convert, title):
+	def get_string_from_list(self, list_to_convert, title):
 		"""
 		Method converts a list in a string.
 
-		Returns the converted string.
+		Returns a string.
 
-		:arg list_to_convert (list): List to convert.
-		:arg title (string): Title displayed.
+		:arg list_to_convert (List): List to convert.
+		:arg title (String): Title displayed.
 		"""
-		message_to_display = '\n' + title + '\n'
+		text = '\n' + title + '\n'
 		for item in list_to_convert:
-			message_to_display += "\n- " + item
-		return message_to_display
+			text += "\n- " + item
+		return text
 
 
-	def getPassphraseKeyFromFile(self, key_file_path):
+	def get_passphrase(self, key_file):
 		"""
-		Method that obtains the encryption key of a file.
+		Method that obtains the key to encrypt/decrypt data from a file.
 
-		Returns a string with the encryption key.
+		Returns a string with the key.
 
-		:arg key_file_path (string): Absolute path of the file.
+		:arg key_file (String): File where the key is stored.
 		"""
-		key_file = open(key_file_path,'r')
-		passphrase = key_file.read()
-		key_file.close()
+		file = open(key_file, 'r')
+		passphrase = file.read()
+		file.close()
 		return passphrase
 
 
-	def getListToAllSubDirectories(self, parent_directory_path):
+	def copy_file(self, source, destination):
 		"""
-		Method that gets all subdirectories of a parent directory.
-
-		Return all found subdirectories.
-	
-		:arg parent_directory_path (string): Home directory path.
+		Method that copies a file.
+		
+		:arg source (String): Source file.
+		:arg destination (String): Destination folder.
 		"""
-		with scandir(parent_directory_path) as directories:
-			sub_directories = [directory.name for directory in directories if directory.is_dir()]
-		return sub_directories
+		copy(source, destination) if path.exists(source) else print("Error") 
 
 
-	def getListYamlFilesInFolder(self, folder_path):
+	def change_owner(self, path, user, group, mode):
 		"""
-		Method that obtains a list with the names of the YAML files inside a folder.
+		Method that changes the owner of a directory and/or file.
 
-		Returns a list with the names of the YAML files.
-
-		:arg folder_path (string): Absolute path of the folder.
-		"""
-		files_yaml_list = [path.basename(x) for x in glob(folder_path + '/*.yaml')]
-		return files_yaml_list
-
-
-	def changeFileFolderOwner(self, file_folder_path, user, group, mode):
-		"""
-		Method that changes the owner of a file or folder.
-
-		:arg file_folder_path (string): Absolute path of the file or folder.
-		:arg user (string): Username.
-		:arg group (string): Group name.
-		:arg mode (string): Mode expressed as an integer.
+		:arg path (String): Directory and/or file path.
+		:arg user (String): Owner user.
+		:arg group (String): Owner group.
+		:arg mode (String): New permissions.
 		"""
 		uid = getpwnam(user).pw_uid
-		gid = getpwnam(group).pw_gid
-		chown(file_folder_path, uid, gid)
-		chmod(file_folder_path, int(mode, base = 8))
+		gid = getgrnam(group)[2]
+		chown(path, uid, gid)
+		chmod(path, int(mode, base = 8))
 
 
-	def getHashFunctionOfFile(self, file_path):
+	def validate_data_regex(self, data, regex):
 		"""
-		Method that obtains the hash (sha256) of a file.
-		
-		Returns the hash of the file.
+		Method that validates data using a regular expression.
 
-		:arg file_path (string): AAbsolute path of the file.
+		Returns a boolean value (True or False).
+
+		:arg data (Integer, String, Double): Data to validate.
+		:arg regex (Rgular Expression): Regular expression to use.
+		"""
+		is_valid = False if not regex.match(data) else True
+		return is_valid
+
+
+	def generate_tuple_to_form(self, tuple_length, text):
+		"""
+		Method that generates a tuple for a form.
+
+		Returns a tuple.
+
+		:arg tuple_length (Integer): List length.
+		:arg text (String): Text to be displayed.
+		"""
+		tuple_to_form = []
+		[tuple_to_form.append((text + ' ' + str(i + 1) + ':', (i + 1), 5, text, (i + 1), 20, 30, 100)) for i in range(tuple_length)]
+		return tuple_to_form
+
+
+	def convert_list_to_tuple(self, list_to_convert, text):
+		"""
+		Method that converts a list into a tuple for a form.
+
+		Return a tuple.
+
+		:arg list_to_convert (List): List to convert to tuple.
+		:arg text (String): Text to be displayed.
+		"""
+		tuple_to_form = []
+		[tuple_to_form.append((text + ' ' + str(i + 1) + ':', (i + 1), 5, item, (i + 1), 20, 30, 100)) for i, item in enumerate(list_to_convert)]
+		return tuple_to_form
+
+
+	def convert_list_to_tuple_rc(self, list_to_convert, text):
+		"""
+		Method that converts a list into a tuple for a radiolist or checklist.
+
+		Return a tuple.
+
+		arg list_to_convert (List): List to convert to tuple.
+		:arg text (String): Text to be displayed.
+		"""
+		tuple_to_rc = []
+		[tuple_to_rc.append((item, text, 0)) for item in list_to_convert]
+		return tuple_to_rc
+
+
+	def get_hash_from_file(self, file_path):
+		"""
+		Method that obtains the sha256 hash of a file.
+		
+		Returns a string with the hash of the file.
+
+		:arg file_path (String): File path.
 		"""
 		hash_sha256 = sha256()
 		with open(file_path, "rb") as file:
@@ -294,72 +181,33 @@ class libPyUtils:
 		return hash_sha256.hexdigest()
 
 
-	def encryptDataWithAES(self, data_to_encrypt, passphrase):
+	def encrypt_data(self, data, passphrase):
 		"""
-		Method that encrypted data using the AES algorithm in GCM mode.
-		
-		Returns a list with the encryption data.
+		Method that encrypts data using the AES-GCM algorithm.
 
-		:arg data_to_encrypt (string): Date to encrypt.
-		:arg passphrase (string): Passphrase used for the encryption/decryption process.
+		Returns a tuple with the encrypted data.
+
+		:arg data (String): Data to be encrypted.
+		:arg passphrase (String): Key to encrypt data.
 		"""
-		data_in_bytes = bytes(data_to_encrypt, "utf-8")
+		data_in_bytes = bytes(data, "utf-8")
 		key = sha256(passphrase.encode()).digest()
 		aes = AES.new(key, AES.MODE_GCM)
 		encrypt_data, auth_tag = aes.encrypt_and_digest(data_in_bytes)
 		return (encrypt_data, aes.nonce, auth_tag)
 
 
-	def decryptDataWithAES(self, data_to_decrypt, passphrase):
+	def decrypt_data(self, data, passphrase):
 		"""
-		Method that decrypted data using the AES algorithm in GCM mode.
-		
-		Returns a string with the original value.
+		Method that decrypts data using the AES-GCM algorithm.
 
-		:arg data_to_decrypt (list): Date to decrypt.
-		:arg passphrase (string): Passphrase used for the encryption/decryption process.
+		Returns a string with the decrypted data.
+
+		:arg data (Tuple): Data to be decrypted.
+		:arg passphrase (String): Key to decrypt data.
 		"""
-		(encrypt_data, nonce, auth_tag) = data_to_decrypt
+		(encrypt_data, nonce, auth_tag) = data
 		key = sha256(passphrase.encode()).digest()
 		aes = AES.new(key, AES.MODE_GCM, nonce)
 		decrypt_data = aes.decrypt_and_verify(encrypt_data, auth_tag)
 		return decrypt_data
-
-
-	def getStatusbyService(self, service_name):
-		"""
-		Gets the current status of a specific service or daemon.
-
-		Returns "Running" if the service is active. Otherwise, "Not running" is returned.
-
-		:arg service_name (string): Name of the service or daemon.
-		"""
-		command_result = popen('(systemctl is-active --quiet ' + service_name + ' && echo "Running" || echo "Not running")').readlines()
-		service_status = command_result[0].rstrip('\n')
-		return service_status
-
-
-	def getPidbyDaemon(self, daemon_name):
-		"""
-		Obtains the PID of a specific service or daemon.
-
-		Returns the PID of the service.
-
-		:arg daemon_name (string): Name of the service or daemon.
-		"""
-		command_result = popen('systemctl show --property MainPID --value ' + daemon_name).readlines()
-		pid = int(command_result[0].rstrip('\n'))
-		return pid
-
-
-	def getThreadsNumberbyPid(self, pid):
-		"""
-		Obtains the number of threads of a particular process from its PID.
-
-		Returns the number of threads in the process.
-		
-		:arg pid (integer): Process PID.
-		"""
-		process = Process(pid).as_dict()
-		threads_number = int(process["num_threads"])
-		return threads_number
