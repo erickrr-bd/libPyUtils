@@ -4,6 +4,7 @@ Email: erodriguez@tekium.mx, erickrr.tbd93@gmail.com
 GitHub: https://github.com/erickrr-bd/libPyUtils
 libPyUtils v2.2 - March 2025
 """
+from glob import glob
 from shutil import copy
 from pwd import getpwnam
 from grp import getgrnam
@@ -44,6 +45,20 @@ class libPyUtils:
 		with open(yaml_file, 'r') as file:
 			data = safe_load(file)
 		return data
+
+
+	def get_yaml_files_in_folder(self, folder_path: str) -> list:
+		"""
+		Method that obtains the names of YAML files stored in a specific path.
+
+		Parameters:
+			folder_path (str): Path where the YAML files will be listed.
+
+		Returns:
+			yaml_files (list): List with the names of the YAML files.
+		"""
+		yaml_files = [path.basename(yaml_file) for yaml_file in glob(f"{folder_path}/*.yaml")]
+		return yaml_files
 
 
 	def convert_yaml_to_str(self, yaml_file: str) -> str:
