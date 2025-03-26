@@ -142,6 +142,25 @@ class libPyUtils:
 		return is_valid
 
 
+	def validate_https_or_http(self, es_host: dict) -> bool:
+		"""
+		Method that validates whether the entered URL begins with HTTPS or not.
+
+		Parameters:
+			es_host (dict): Dictionary with the URLs to validate.
+
+		Returns:
+			(bool): True if URLs begin with HTTPS, false otherwise.
+		"""
+		cont = 0
+		for host in es_host:
+			if host.startswith("https://"):
+				cont += 1
+		if cont == len(es_host):
+			return True
+		return False
+
+
 	def generate_tuple_to_form(self, tuple_length: int, text: str) -> tuple:
 		"""
 		Method that generates a tuple for a pythondialog form.
