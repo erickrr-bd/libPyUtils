@@ -224,6 +224,70 @@ class libPyUtils:
 		return tuple_to_rc
 
 
+	def convert_time_to_seconds(self, unit_time: str, total_time: int) -> int:
+		"""
+		Method that converts a quantity expressed in minutes, hours or days into seconds.
+
+		Parameters:
+			unit_time (str): Unit of time in which the total is expressed (minutes, hours or days).
+			total_time (int): Total time to convert.
+
+		Returns:
+			total_seconds (int): Result of conversion to seconds.
+		"""
+		match unit_time:
+			case "minutes":
+				total_seconds = total_time * 60
+			case "hours":
+				total_seconds = total_time * 3600
+			case "days":
+				total_seconds = total_time * 86400
+		return total_seconds
+
+
+	def get_gte_date(self, unit_time: str, total_time: int) -> str:
+		"""
+		Method that converts an amount of time expressed in minutes, hours or days into the gte value expressed in date math format.
+
+		Parameters:
+			unit_time (str): Unit of time in which the total is expressed (minutes, hours or days).
+			total_time (int): Total time to convert.
+
+		Returns:
+			date_string (str): String in date math format.
+		"""
+		date_string = "now-"
+		match unit_time:
+			case "minutes":
+				date_string += str(total_time) + "m/m"
+			case "hours":
+				date_string += str(total_time) + "h/h"
+			case "days":
+				date_string += str(total_time) + "d/d"
+		return date_string
+
+
+	def get_lte_date(self, unit_time: str) -> str:
+		"""
+		Method that converts an amount of time expressed in minutes, hours or days into the lte value expressed in date math format.
+
+		Parameters:
+			unit_time (str): Unit of time in which the total is expressed (minutes, hours or days).
+
+		Returns:
+			date_string (str): String in date math format.
+		"""
+		date_string = ""
+		match unit_time:
+			case "minutes":
+				date_string += "now/m"
+			case "hours":
+				date_string += "now/h"
+			case days:
+				date_string += "now/d"
+		return date_string
+
+
 	def get_hash_from_file(self, file_path: str) -> str:
 		"""
 		Method that obtains the "sha256" hash of a file.
