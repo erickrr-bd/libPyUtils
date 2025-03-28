@@ -84,6 +84,20 @@ class libPyUtils:
 		return yaml_files
 
 
+	def get_bck_files_in_folder(self, folder_path: str) -> list:
+		"""
+		Method that obtains the names of bck files stored in a specific path.
+
+		Parameters:
+			folder_path (str): Path where the bck files will be listed.
+
+		Returns:
+			bck_files (list): List with the names of the bck files.
+		"""
+		bck_files = [path.basename(bck_file) for bck_file in glob(f"{folder_path}/*.bck")]
+		return bck_files
+
+
 	def convert_yaml_to_str(self, yaml_file: str) -> str:
 		"""
 		Method that converts the data stored in a YAML file into a string.
