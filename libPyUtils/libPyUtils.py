@@ -9,10 +9,10 @@ from shutil import copy
 from pwd import getpwnam
 from grp import getgrnam
 from hashlib import sha256
-from os import chown, chmod, path
 from Cryptodome.Cipher import AES
 from dataclasses import dataclass
 from yaml import safe_load, safe_dump
+from os import chown, chmod, path, remove, rename
 
 @dataclass
 class libPyUtils:
@@ -45,6 +45,29 @@ class libPyUtils:
 		with open(yaml_file, 'r') as file:
 			data = safe_load(file)
 		return data
+
+
+	def delete_file(self, file_path: str) -> None:
+		"""
+		Method that deletes a file.
+
+		Parameters:
+			file_path (str): Path's file to be deleted.
+		"""
+		if path.exists(file_path):
+			remove(file_path)
+
+
+	def rename_file_or_folder(self, original_name: str, new_name: str) -> None:
+		"""
+		Method that renames a file or folder.
+
+		Parameters:
+			original_name: Name of the file or folder to rename.
+			new_name: New name of the file or folder.
+		"""
+		if path.exists(original_name):
+			rename(original_name, new_name)
 
 
 	def get_yaml_files_in_folder(self, folder_path: str) -> list:
