@@ -2,17 +2,18 @@
 Author: Erick Roberto Rodriguez Rodriguez
 Email: erodriguez@tekium.mx, erickrr.tbd93@gmail.com
 GitHub: https://github.com/erickrr-bd/libPyUtils
-libPyUtils v2.2 - March 2025
+libPyUtils v2.2 - April 2025
 """
 from glob import glob
 from shutil import copy
 from pwd import getpwnam
 from grp import getgrnam
 from hashlib import sha256
+from psutil import Process
 from Cryptodome.Cipher import AES
 from dataclasses import dataclass
 from yaml import safe_load, safe_dump
-from os import chown, chmod, path, remove, rename
+from os import chown, chmod, path, remove, rename, popen
 
 @dataclass
 class libPyUtils:
@@ -323,6 +324,51 @@ class libPyUtils:
 			case days:
 				date_string += "now/d"
 		return date_string
+
+
+	def get_status_by_daemon(self, daemon_name: str) -> str:
+		"""
+		Method that obtains the current status of a daemon.
+
+		Parameters:
+			daemon_name (str): Daemon's name.
+
+		Returns:
+			daemon_status (str): Current status of the daemon.
+		"""
+		result = popen(f'(systemctl is-active --quiet {daemon_name} && echo "Running" || echo "Not running")').readlines()
+		daemon_status = result[0].rstrip('\n')
+		return daemon_status
+
+
+	def get_pid_by_daemon(self, daemon_name: str) -> int:
+		"""
+		Method that obtains the PID of a daemon.
+
+		Parameters:
+			daemon_name (str): Name of the daemon or service.
+
+		Returns:
+			pid (int): Daemon's PID.
+		"""
+		result = popen(f'systemctl show --property MainPID --value {daemon_name}').readlines()
+		pid = int(result[0].rstrip('\n'))
+		return pid
+
+
+	def get_threads_by_pid(self, pid: int) -> int:
+		"""
+		Method that obtains the total number of threads running in a process based on its PID.
+
+		Parameters:
+			pid (int): Daemon's PID.
+
+		Returns:
+			total_threads (int): Total number of threads running on the PID.
+		"""
+		process = Process(pid).as_dict()
+		total_threads = int(process["num_threads"])
+		return total_threads
 
 
 	def get_hash_from_file(self, file_path: str) -> str:
