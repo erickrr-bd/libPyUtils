@@ -13,7 +13,7 @@ from psutil import Process
 from Cryptodome.Cipher import AES
 from dataclasses import dataclass
 from yaml import safe_load, safe_dump
-from os import chown, chmod, path, remove, rename, popen
+from os import chown, chmod, path, remove, rename, popen, system
 
 @dataclass
 class libPyUtils:
@@ -326,6 +326,47 @@ class libPyUtils:
 		return date_string
 
 
+	def manage_daemon(self, daemon_name: str, option: int) -> int:
+		"""
+		Method that manages a daemon or service (start, restart, and stop).
+
+		Parameters:
+			daemon_name (str): Daemon's name.
+			option (int): Option to perform (1.- Start daemon, 2.- Restart daemon, 3.- Stop daemon)
+
+		Returns:
+			result (int): Result of the command execution.
+		"""
+		match option:
+			case 1:
+				result = system(f"systemctl start {daemon_name}")
+			case 2:
+				result = system(f"systemctl restart {daemon_name}")
+			case 3:
+				result = system(f"systemctl stop {daemon_name}")
+		return int(result)
+
+
+	def get_detailed_status_by_daemon(self, daemon_name: str, file_name) -> str:
+		"""
+		Method that gets the current detailed status of a daemon.
+
+		Parameters:
+			daemon_name (str): Daemon's name.
+			file_name (str): File where the detailed status of the daemon is saved.
+
+		Returns:
+			service_status (str): Detailed status of the service or daemon.
+		"""
+		self.delete_file(file_name)
+		system(f'(systemctl is-active --quiet {daemon_name} && echo "Service is running!" || echo "Service is not running!") >> {file_name}')
+		system(f'echo "Detailed service status:" >> {file_name}')
+		system(f"systemctl -l status {daemon_name} >> {file_name}")
+		with open(file_name, 'r', encoding = "utf-8") as status_file:
+			service_status = status_file.read()
+		return service_status
+
+
 	def get_status_by_daemon(self, daemon_name: str) -> str:
 		"""
 		Method that obtains the current status of a daemon.
@@ -422,3 +463,4 @@ class libPyUtils:
 		aes = AES.new(key, AES.MODE_GCM, nonce)
 		decrypt_data = aes.decrypt_and_verify(encrypt_data, auth_tag)
 		return decrypt_data
+		
