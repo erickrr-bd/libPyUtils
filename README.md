@@ -29,6 +29,7 @@ This project was born from the need to have a set of methods or utilities that f
 - Python Libraries
   - pycryptodomex
   - PyYAML
+  - psutil
 
 **NOTE:** The versions displayed are the versions with which it was tested. This doesn't mean that versions older than these don't work.
 
