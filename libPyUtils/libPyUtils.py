@@ -2,7 +2,8 @@
 Author: Erick Roberto Rodriguez Rodriguez
 Email: erodriguez@tekium.mx, erickrr.tbd93@gmail.com
 GitHub: https://github.com/erickrr-bd/libPyUtils
-libPyUtils v2.2 - April 2025
+libPyUtils v2.2 - August 2025
+Utilities for easy creation of Python applications.
 """
 from glob import glob
 from shutil import copy
@@ -17,9 +18,6 @@ from os import chown, chmod, path, remove, rename, popen, system
 
 @dataclass
 class libPyUtils:
-	"""
-	Utilities for easy creation of Python applications.
-	"""
 
 	def create_yaml_file(self, data: dict, yaml_file: str) -> None:
 		"""
@@ -85,18 +83,18 @@ class libPyUtils:
 		return yaml_files
 
 
-	def get_bck_files_in_folder(self, folder_path: str) -> list:
+	def get_disabled_files_in_folder(self, folder_path: str) -> list:
 		"""
-		Method that obtains the names of bck files stored in a specific path.
+		Method that obtains the disabled files' names stored in a specific path.
 
 		Parameters:
-			folder_path (str): Path where the bck files will be listed.
+			folder_path (str): Path where the files will be searched for.
 
 		Returns:
-			bck_files (list): List with the names of the bck files.
+			disabled_files (list): List with the disabled files' names.
 		"""
-		bck_files = [path.basename(bck_file) for bck_file in glob(f"{folder_path}/*.bck")]
-		return bck_files
+		disabled_files = [path.basename(disabled_file) for disabled_file in glob(f"{folder_path}/*.disabled")]
+		return disabled_files
 
 
 	def convert_yaml_to_str(self, yaml_file: str) -> str:
