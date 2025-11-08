@@ -3,7 +3,7 @@ Author: Erick Roberto Rodriguez Rodriguez
 Email: erodriguez@tekium.mx, erickrr.tbd93@gmail.com
 GitHub: https://github.com/erickrr-bd/libPyUtils
 libPyUtils v2.2 - November 2025
-Utilities for easy creation of Python applications.
+Modular collection of features and tools designed to make Python application development easier.
 """
 from glob import glob
 from pwd import getpwnam
