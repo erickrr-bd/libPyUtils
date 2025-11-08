@@ -1,8 +1,8 @@
 # libPyUtils v2.2
 
-Utilities for easy development of applications in Python.
+Modular collection of features and tools designed to make Python application development easier. 
 
-This project was born from the need to have a set of methods or utilities that facilitate the development of Python applications.
+It includes utilities for validation, error handling, automation of common tasks and reusable structures that accelerate the implementation of robust and maintainable solutions.
 
 ## Utilities
 - Create and read YAML files.
