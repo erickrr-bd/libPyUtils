@@ -2,19 +2,19 @@
 Author: Erick Roberto Rodriguez Rodriguez
 Email: erodriguez@tekium.mx, erickrr.tbd93@gmail.com
 GitHub: https://github.com/erickrr-bd/libPyUtils
-libPyUtils v2.2 - August 2025
+libPyUtils v2.2 - November 2025
 Utilities for easy creation of Python applications.
 """
 from glob import glob
-from shutil import copy
 from pwd import getpwnam
 from grp import getgrnam
 from hashlib import sha256
 from psutil import Process
+from shutil import copy, rmtree
 from Cryptodome.Cipher import AES
 from dataclasses import dataclass
 from yaml import safe_load, safe_dump
-from os import chown, chmod, path, remove, rename, popen, system
+from os import chown, chmod, path, remove, rename, popen, system, mkdir, scandir
 
 @dataclass
 class libPyUtils:
@@ -25,7 +25,7 @@ class libPyUtils:
 
 		Parameters:
 			data (dict): Data to save in the file.
-			yaml_file (str): YAML file.
+			yaml_file (str): YAML file's path.
 		"""
 		with open(yaml_file, 'w') as file:
 			safe_dump(data, file, default_flow_style = False)
@@ -57,6 +57,16 @@ class libPyUtils:
 			remove(file_path)
 
 
+	def create_folder(self, folder_path: str) -> None:
+		"""
+		Method that creates a folder.
+
+		Parameters:
+			folder_path (str): Path's folder to be created.
+		"""
+		mkdir(folder_path) if not path.isdir(folder_path) else False
+
+
 	def rename_file_or_folder(self, original_name: str, new_name: str) -> None:
 		"""
 		Method that renames a file or folder.
@@ -67,6 +77,46 @@ class libPyUtils:
 		"""
 		if path.exists(original_name):
 			rename(original_name, new_name)
+
+
+	def delete_folder(self, folder_path: str) -> None:
+		"""
+		Method that deletes a specific folder.
+
+		Parameters:
+			folder_path (str): Path's folder.
+		"""
+		rmtree(folder_path) if path.exists(folder_path) else False
+
+
+	def get_enabled_subdirectories(self, folder_path: str) -> list:
+		"""
+		Method that obtains enabled subdirectories from a specific directory.
+
+		Parameters:
+			folder_path (str): Path's folder.
+
+		Returns:
+			subdirectories (list): Subdirectories' list.
+		"""
+		with scandir(folder_path) as directories:
+			subdirectories = [directory.name for directory in directories if directory.is_dir() and not directory.name.endswith(".disabled")]
+		return subdirectories
+
+
+	def get_disabled_subdirectories(self, folder_path: str) -> list:
+		"""
+		Method that obtains disabled subdirectories from a specific directory.
+
+		Parameters:
+			folder_path (str): Path's folder.
+
+		Returns:
+			subdirectories (list): Subdirectories' list.
+		"""
+		with scandir(folder_path) as directories:
+			subdirectories = [directory.name for directory in directories if directory.is_dir() and directory.name.endswith(".disabled")]
+		return subdirectories
 
 
 	def get_yaml_files_in_folder(self, folder_path: str) -> list:
@@ -116,6 +166,17 @@ class libPyUtils:
 						data[key] = "Encrypted data"
 		data_str = safe_dump(data, default_flow_style = False)
 		return data_str
+
+
+	def convert_yaml_to_txt(self, yaml_file: str, txt_file: str) -> None:
+		"""
+		"""
+		with open(yaml_file, 'r') as file:
+			yaml_data = safe_load(file)
+
+		with open(txt_file, 'w') as file:
+			for key, value in yaml_data.items():
+				file.write(f"{key} : {value}\n")
 
 
 	def get_str_from_list(self, list_to_convert: list, title: str) -> str:
