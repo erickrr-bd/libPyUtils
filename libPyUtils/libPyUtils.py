@@ -170,13 +170,25 @@ class libPyUtils:
 
 	def convert_yaml_to_txt(self, yaml_file: str, txt_file: str) -> None:
 		"""
+		Method that converts a YAML file into a TXT file.
+
+		Parameters:
+			yaml_file (str): YAML file's path.
+			txt_file (str): TXT file's path.
 		"""
 		with open(yaml_file, 'r') as file:
 			yaml_data = safe_load(file)
-
 		with open(txt_file, 'w') as file:
 			for key, value in yaml_data.items():
-				file.write(f"{key} : {value}\n")
+				if isinstance(value, list):
+					for item in value:
+						if isinstance(item, list):
+							for item2 in value:
+								file.write(f"{item2[0]} - {item2[1]}\n")
+						else:
+							file.write(f"{item} : {value}\n")
+				else:
+					file.write(f"{key} : {value}\n")
 
 
 	def get_str_from_list(self, list_to_convert: list, title: str) -> str:
