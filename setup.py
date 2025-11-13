@@ -1,36 +1,18 @@
-from pathlib import Path
-from setuptools import find_packages, setup
-
-HERE = Path(__file__).parent
-
-VERSION = '1.2'
-PACKAGE_NAME = 'libPyUtils' 
-AUTHOR = 'Erick Rodríguez'
-AUTHOR_EMAIL = 'erickrr.tbd93@gmail.com, erodriguez@tekium.mx' 
-URL = 'https://github.com/erickrr-bd/libPyUtils' 
-
-LICENSE = 'GPLv3' 
-DESCRIPTION = 'Utilities for Python applications.' 
-LONG_DESCRIPTION = (HERE / "README.md").read_text(encoding='utf-8')
-LONG_DESC_TYPE = "text/markdown"
-
-INSTALL_REQUIRES = [
-      'pyyaml',
-      'pycryptodome',
-      'pycryptodomex'
-      ]
+from setuptools import setup, find_packages
 
 setup(
-    name=PACKAGE_NAME,
-    version=VERSION,
-    description=DESCRIPTION,
-    long_description=LONG_DESCRIPTION,
-    long_description_content_type=LONG_DESC_TYPE,
-    author=AUTHOR,
-    author_email=AUTHOR_EMAIL,
-    url=URL,
-    install_requires=INSTALL_REQUIRES,
-    license=LICENSE,
-    packages=find_packages(),
-    include_package_data=True
+    name = "libPyUtils",
+    version = "2.2",
+    author = "Erick Rodriguez",
+    description = "Modular collection of features and tools designed to make Python application development easier.",
+    long_description = open("README.md", encoding = "utf-8").read(),
+    long_description_content_type = "text/markdown",
+    packages = find_packages(),
+    install_requires = ["pycryptodomex", "PyYAML", "psutil"],
+    classifiers = [
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: GPL-3.0",
+        "Operating System :: OS Independent",
+    ],
+    python_requires = ">=3.12",
 )
