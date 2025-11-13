@@ -182,11 +182,7 @@ class libPyUtils:
 			for key, value in yaml_data.items():
 				if isinstance(value, list):
 					for item in value:
-						if isinstance(item, list):
-							for item2 in value:
-								file.write(f"{item2[0]} - {item2[1]}\n")
-						else:
-							file.write(f"{item} : {value}\n")
+						file.write(f"{item[0]} - {item[1]}\n")
 				else:
 					file.write(f"{key} : {value}\n")
 
