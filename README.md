@@ -1,42 +1,46 @@
-# libPyUtils v2.2
+# 🔨 libPyUtils v2.2
 
 Modular collection of features and tools designed to make Python application development easier. 
 
 It includes utilities for validation, error handling, automation of common tasks and reusable structures that accelerate the implementation of robust and maintainable solutions.
 
-## Utilities
-- Create and read YAML files.
-- Read a YAML file and convert the content to a string. If the value of a key is encrypted, it replaces it with the legend "Encrypted value", for security reasons.
-- Copy a file.
-- Remove a file.
-- Create and remove folders.
-- Rename a file or folder.
-- Validate data using a regular expression.
-- Converts an amount of time expressed in minutes, hours and/or days into seconds.
-- Converts an amount of time expressed in minutes, hours and/or days into a string that represents a date math to do time range searches in ElasticSearch.
-- Create and/or convert a list into an object usable by PythonDialog.
-- Convert a list of objects to a string.
-- Get passphrase for encryption/decryption process of a file.
-- Get subdirectories of a folder.
-- Get a list of YAML files in a folder.
-- Modify permissions of a file or folder. Change of owner, such as, access permissions.
-- Get hash of a file (sha256).
-- Data encryption and decryption. Use of AES algorithm GCM mode.
+# ⚙️ Features
+- YAML file management (creation, reading, converting to TXT)
+- Folder management (creation, rename, delete)
+- List and tuple management (convert to string, convert to pythondialog form, convert to pythondialog radiolist or pythondialog checklist)
+- File management (copy, delete, change of owner, change of permissions)
+- Obtain encryption key for a file
+- Validate data using regular expressions
+- Convert time to seconds
+- Generate lte and gte in date math format
+- Demon or service management (start, stop, restart, get current status)
+- Thread and process management (Get pid of a process, get number of threads in a process)
+- Get hash of a file
+- Encrypt and decrypt a string (AES-GCM)
 
-# Requirements
-- Red Hat 8 or Rocky Linux 8 (Tested on Rocky Linux 8.10)
-- Python 3.12
+# 📝 Requirements
+- Python 3.12+
 - Python Libraries
-  - pycryptodomex
-  - PyYAML
-  - psutil
+  - [pycryptodomex](https://pypi.org/project/pycryptodome/)
+  - [PyYAML](https://pypi.org/project/PyYAML/)
+  - [psutil](https://pypi.org/project/psutil/)
 
-**NOTE:** The versions displayed are the versions with which it was tested. This doesn't mean that versions older than these don't work.
+# 🛠️ Installation
 
-# Installation
+The installation can be done using a .whl (Wheel) file. To generate a file, you must have the following packaging tools installed:
 
-Copy the "libPyUtils" folder to the following path:
+`pip install setuptools wheel`
 
-`/usr/local/lib/python3.12/site-packages/`
+The following command is executed from the root of the project:
 
-**NOTE:** The path changes depending on the version of Python used.
+`python setup.py sdist bdist_wheel`
+
+This action will generate the following files:
+
+`dist/libPyUtils-2.2-py3-none-any.whl`
+
+`dist/libPyUtils-2.2.tar.gz`
+
+It's now possible to install the library using the Wheel file and the pip tool:
+
+`pip3 install libPyUtils-2.2-py3-none-any.whl`
