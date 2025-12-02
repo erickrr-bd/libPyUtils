@@ -180,9 +180,9 @@ class libPyUtils:
 			yaml_data = safe_load(file)
 		with open(txt_file, 'w') as file:
 			for key, value in yaml_data.items():
-				if isinstance(value, list):
-					for item in value:
-						file.write(f"{item[0]} - {item[1]}\n")
+				if isinstance(value, dict):
+					for sub_key, sub_value in value.items():
+						file.write(f"{sub_key} - {sub_value}\n")
 				else:
 					file.write(f"{key} : {value}\n")
 
